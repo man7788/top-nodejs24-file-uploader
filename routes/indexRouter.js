@@ -9,6 +9,7 @@ indexRouter.get('/', indexController.getIndex);
 
 // Sign-up Routes
 indexRouter.get('/sign-up', indexController.getSignup);
+indexRouter.post('/sign-up', indexController.postSignup);
 
 // Log-in Routes
 indexRouter.get('/log-in', indexController.getLogin);
