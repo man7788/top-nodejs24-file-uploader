@@ -7,6 +7,14 @@ exports.getIndex = async (req, res) => {
   }
 };
 
+// Sign-up Controllers
+exports.getSignup = async (req, res) => {
+  if (req.isAuthenticated()) {
+    res.redirect('/main');
+  }
+  res.render('sign-up', { title: 'Sign Up' });
+};
+
 // Log-in Controllers
 exports.getLogin = async (req, res) => {
   if (req.isAuthenticated()) {
