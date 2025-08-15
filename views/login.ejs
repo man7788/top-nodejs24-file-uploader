@@ -8,9 +8,18 @@
   <body>
     <h1><%= title %></h1>
     <form action="/log-in" method="POST">
-      <input type="hidden" name="email" value="foo@bar.com" />
-      <input type="hidden" name="password" value="foobar123" />
+      <label for="email">Email:</label><br />
+      <input type="text" name="email" value="foo@bar.com" /><br />
+      <label for="email">Password:</label><br />
+      <input type="password" name="password" value="foobar123" /><br />
       <button type="submit">Log In</button>
     </form>
+    <% if (locals.errors) { %>
+    <ul>
+      <% errors.forEach((error)=>{ %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
   </body>
 </html>
