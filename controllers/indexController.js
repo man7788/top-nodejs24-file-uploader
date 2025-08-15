@@ -1,5 +1,6 @@
 const db = require('../prisma/queries');
 const { body, validationResult } = require('express-validator');
+const passport = require('passport');
 const bcrypt = require('bcryptjs');
 
 const nameErr = 'must be between 1 and 255 characters.';
@@ -48,7 +49,7 @@ exports.getSignup = async (req, res) => {
 
 exports.postSignup = [
   validateUser,
-  async (req, res) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res
@@ -57,10 +58,14 @@ exports.postSignup = [
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = await db.createUser(req.body.email, hashedPassword);
+    await db.createUser(req.body.email, hashedPassword);
 
-    res.send(user);
+    next();
   },
+  passport.authenticate('local', {
+    successRedirect: '/main',
+    failureRedirect: '/log-in',
+  }),
 ];
 
 // Log-in Controllers
