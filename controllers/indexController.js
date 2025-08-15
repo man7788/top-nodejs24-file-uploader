@@ -8,7 +8,7 @@ const emailErr = 'format is not correct.';
 const passwordErr = 'must be between 1 and 64 characters.';
 const confirmErr = 'do not match.';
 
-const validateUser = [
+const validateSignup = [
   body('email')
     .trim()
     .isEmail()
@@ -30,6 +30,21 @@ const validateUser = [
     .escape(),
 ];
 
+const validateLogin = [
+  body('email')
+    .trim()
+    .isEmail()
+    .withMessage(`Email ${emailErr}`)
+    .isLength({ min: 1, max: 255 })
+    .withMessage(`Email ${nameErr}`)
+    .escape(),
+  body('password')
+    .trim()
+    .isLength({ min: 1, max: 64 })
+    .withMessage(`Password ${passwordErr}`)
+    .escape(),
+];
+
 // Index Controllers
 exports.getIndex = async (req, res) => {
   if (req.isAuthenticated()) {
@@ -48,7 +63,7 @@ exports.getSignup = async (req, res) => {
 };
 
 exports.postSignup = [
-  validateUser,
+  validateSignup,
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -70,11 +85,36 @@ exports.postSignup = [
 
 // Log-in Controllers
 exports.getLogin = async (req, res) => {
+  const errMessages = req.flash('error');
+  const errors = [];
+  if (errMessages) {
+    errMessages.forEach((message) => {
+      errors.push({ msg: message });
+    });
+  }
   if (req.isAuthenticated()) {
     res.redirect('/main');
   }
-  res.render('login', { title: 'Log In' });
+  res.render('login', { title: 'Log In', errors });
 };
+
+exports.postLogin = [
+  validateLogin,
+  async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res
+        .status(400)
+        .render('login', { title: 'Log In', errors: errors.array() });
+    }
+    next();
+  },
+  passport.authenticate('local', {
+    successRedirect: '/main',
+    failureRedirect: '/log-in',
+    failureFlash: true,
+  }),
+];
 
 // Main Controllers
 exports.getMain = async (req, res) => {
