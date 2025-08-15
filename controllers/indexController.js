@@ -57,7 +57,7 @@ exports.getIndex = async (req, res) => {
 // Sign-up Controllers
 exports.getSignup = async (req, res) => {
   if (req.isAuthenticated()) {
-    res.redirect('/main');
+    return res.redirect('/main');
   }
   res.render('sign-up', { title: 'Sign Up' });
 };
@@ -93,7 +93,7 @@ exports.getLogin = async (req, res) => {
     });
   }
   if (req.isAuthenticated()) {
-    res.redirect('/main');
+    return res.redirect('/main');
   }
   res.render('login', { title: 'Log In', errors });
 };
@@ -103,9 +103,7 @@ exports.postLogin = [
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res
-        .status(400)
-        .render('login', { title: 'Log In', errors: errors.array() });
+      return res.status(400).render('login', { title: 'Log In' });
     }
     next();
   },
@@ -131,6 +129,6 @@ exports.getMain = async (req, res) => {
   if (req.isAuthenticated()) {
     res.render('main', { title: 'Main' });
   } else {
-    res.render('login', { title: 'Log In' });
+    res.redirect('/log-in');
   }
 };
