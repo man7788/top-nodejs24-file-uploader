@@ -13,6 +13,7 @@ indexRouter.post('/sign-up', indexController.postSignup);
 
 // Log-in Routes
 indexRouter.get('/log-in', indexController.getLogin);
+indexRouter.post('/log-in', indexController.postLogin);
 
 // Main Routes
 indexRouter.get('/main', indexController.getMain);
