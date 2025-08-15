@@ -116,6 +116,16 @@ exports.postLogin = [
   }),
 ];
 
+// Log-out Controllers
+exports.getLogout = (req, res) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.redirect('/');
+  });
+};
+
 // Main Controllers
 exports.getMain = async (req, res) => {
   if (req.isAuthenticated()) {
