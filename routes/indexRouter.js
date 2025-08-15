@@ -15,6 +15,9 @@ indexRouter.post('/sign-up', indexController.postSignup);
 indexRouter.get('/log-in', indexController.getLogin);
 indexRouter.post('/log-in', indexController.postLogin);
 
+// Log-out Routes
+indexRouter.get('/log-out', indexController.getLogout);
+
 // Main Routes
 indexRouter.get('/main', indexController.getMain);
 
