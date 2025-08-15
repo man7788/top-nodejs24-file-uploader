@@ -5,6 +5,8 @@ const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
 const flash = require('connect-flash');
+const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
+const { PrismaClient } = require('@prisma/client');
 
 const app = express();
 
@@ -23,6 +25,14 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: new PrismaSessionStore(new PrismaClient(), {
+      checkPeriod: parseInt(process.env.SESSION_CHECK_PERIOD),
+      dbRecordIdIsSessionId: true,
+      dbRecordIdFunction: undefined,
+    }),
+    cookie: {
+      maxAge: parseInt(process.env.SESSION_MAX_AGE),
+    },
   })
 );
 
