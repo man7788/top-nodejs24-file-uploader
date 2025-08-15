@@ -118,5 +118,9 @@ exports.postLogin = [
 
 // Main Controllers
 exports.getMain = async (req, res) => {
-  res.render('main', { title: 'Main' });
+  if (req.isAuthenticated()) {
+    res.render('main', { title: 'Main' });
+  } else {
+    res.render('login', { title: 'Log In' });
+  }
 };
