@@ -48,7 +48,7 @@ const validateLogin = [
 // Index Controllers
 exports.getIndex = async (req, res) => {
   if (req.isAuthenticated()) {
-    res.redirect('/main');
+    res.redirect('/uploader');
   } else {
     res.render('login', { title: 'Log In' });
   }
@@ -108,7 +108,7 @@ exports.postLogin = [
     next();
   },
   passport.authenticate('local', {
-    successRedirect: '/main',
+    successRedirect: '/uploader',
     failureRedirect: '/log-in',
     failureFlash: true,
   }),
@@ -122,13 +122,4 @@ exports.getLogout = (req, res) => {
     }
     res.redirect('/');
   });
-};
-
-// Main Controllers
-exports.getMain = async (req, res) => {
-  if (req.isAuthenticated()) {
-    res.render('main', { title: 'Main' });
-  } else {
-    res.redirect('/log-in');
-  }
 };
