@@ -8,8 +8,9 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <form action="/main/upload" method="POST" enctype="multipart/form-data">
-      <input type="file" name="upload" />
+    <form action="/uploader" method="POST" enctype="multipart/form-data">
+      <input type="file" name="upload" /><br />
+      <button type="submit">Upload</button>
     </form>
     <a href="/log-out">Log Out</a>
   </body>
