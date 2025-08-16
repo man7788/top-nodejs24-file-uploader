@@ -18,6 +18,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(flash());
 
 const indexRouter = require('./routes/indexRouter');
+const uploaderRouter = require('./routes/uploaderRouter');
 
 // SESSION SETUP //
 app.use(
@@ -46,6 +47,7 @@ app.use((req, res, next) => {
 
 // ROUTES //
 app.use('/', indexRouter);
+app.use('/uploader', uploaderRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
