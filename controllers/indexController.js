@@ -47,6 +47,7 @@ const validateLogin = [
 
 // Index Controllers
 exports.getIndex = async (req, res) => {
+  console.log(res.locals);
   if (req.isAuthenticated()) {
     res.redirect('/uploader');
   } else {
@@ -57,7 +58,7 @@ exports.getIndex = async (req, res) => {
 // Sign-up Controllers
 exports.getSignup = async (req, res) => {
   if (req.isAuthenticated()) {
-    return res.redirect('/main');
+    return res.redirect('/uploader');
   }
   res.render('sign-up', { title: 'Sign Up' });
 };
@@ -73,12 +74,14 @@ exports.postSignup = [
     }
 
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    await db.createUser(req.body.email, hashedPassword);
+    const user = await db.createUser(req.body.email, hashedPassword);
+
+    await db.createFolder('root', user.id);
 
     next();
   },
   passport.authenticate('local', {
-    successRedirect: '/main',
+    successRedirect: '/uploader',
     failureRedirect: '/log-in',
   }),
 ];
