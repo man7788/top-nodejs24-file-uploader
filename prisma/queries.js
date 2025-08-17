@@ -34,3 +34,25 @@ exports.readUserById = async (id) => {
   });
   return user;
 };
+
+// Create Folder
+exports.createFolder = async (name, userId, superFolderId) => {
+  let folder;
+  if (superFolderId) {
+    folder = await prisma.folder.create({
+      data: {
+        name,
+        user: { connect: { id: userId } },
+        superFolder: { connect: { id: superFolderId } },
+      },
+    });
+  } else {
+    folder = await prisma.folder.create({
+      data: {
+        name,
+        user: { connect: { id: userId } },
+      },
+    });
+  }
+  return folder;
+};
