@@ -106,7 +106,9 @@ exports.postLogin = [
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).render('login', { title: 'Log In' });
+      return res
+        .status(400)
+        .render('login', { title: 'Log In', errors: errors.array() });
     }
     next();
   },
