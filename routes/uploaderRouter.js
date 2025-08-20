@@ -1,12 +1,14 @@
 const { Router } = require('express');
-const multer = require('multer');
 
 const uploaderController = require('../controllers/uploaderController');
 
-const uploaderRouter = Router();
+const uploaderRouter = Router({ mergeParams: true });
 
 // Uploader Routes
 uploaderRouter.get('/', uploaderController.getUploader);
 uploaderRouter.post('/', uploaderController.postUploader);
+
+// Folder Routes
+uploaderRouter.get('/*folders', uploaderController.getFolder);
 
 module.exports = uploaderRouter;
