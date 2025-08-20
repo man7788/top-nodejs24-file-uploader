@@ -1,7 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-// Create User
+// User Queries
 exports.createUser = async (email, password) => {
   const user = await prisma.user.create({
     data: {
@@ -12,7 +12,6 @@ exports.createUser = async (email, password) => {
   return user;
 };
 
-// Read User
 exports.readUserByEmail = async (email) => {
   const user = await prisma.user.findUnique({
     where: {
@@ -35,7 +34,7 @@ exports.readUserById = async (id) => {
   return user;
 };
 
-// Create Folder
+// Folder Queries
 exports.createFolder = async (name, userId, superFolderId) => {
   let folder;
   if (superFolderId) {
@@ -52,6 +51,28 @@ exports.createFolder = async (name, userId, superFolderId) => {
         name,
         user: { connect: { id: userId } },
       },
+    });
+  }
+  return folder;
+};
+
+exports.readFolder = async (userId, folderId) => {
+  let folder;
+  if (folderId) {
+    folder = await prisma.folder.findFirst({
+      where: {
+        id: folderId,
+        userId,
+      },
+      include: { subFolders: true },
+    });
+  } else {
+    folder = await prisma.folder.findFirst({
+      where: {
+        userId,
+        superFolderId: null,
+      },
+      include: { subFolders: true },
     });
   }
   return folder;
