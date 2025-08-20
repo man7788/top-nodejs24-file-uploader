@@ -8,6 +8,16 @@
   </head>
   <body>
     <h1><%= title %></h1>
+    <h2>Index of /uploader<%= filePath %></h2>
+    <ul>
+      <% locals.folders.map((folder) =>{ %>
+      <li>
+        <a href="/uploader<%= filePath %>/<%= folder.name %>"
+          ><%= folder.name %></a
+        >
+      </li>
+      <% }) %>
+    </ul>
     <form action="/uploader" method="POST" enctype="multipart/form-data">
       <input type="file" name="upload" /><br />
       <button type="submit">Upload</button>
