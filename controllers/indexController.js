@@ -96,7 +96,7 @@ exports.getLogin = async (req, res) => {
     });
   }
   if (req.isAuthenticated()) {
-    return res.redirect('/main');
+    return res.redirect('/uploader');
   }
   res.render('login', { title: 'Log In', errors });
 };
