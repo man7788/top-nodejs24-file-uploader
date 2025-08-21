@@ -48,6 +48,21 @@ exports.getFolder = async (req, res) => {
       pathString = pathString + name + '/';
     });
 
+    let backPath = '/';
+    path.forEach((name, index) => {
+      if (path.length === 1) {
+        backPath = backPath.slice(0, -1);
+        return backPath;
+      }
+
+      if (index === path.length - 1) {
+        backPath = backPath.slice(0, -1);
+        return backPath;
+      }
+
+      backPath = backPath + name + '/';
+    });
+
     const traverseSubFolder = (subFolders, path, i = 0) => {
       // Path name doesn't exist in directory, 1 index ahead of sub-folders array
       if (i > subFolders.length - 1) {
@@ -69,6 +84,7 @@ exports.getFolder = async (req, res) => {
         return res.render('uploader', {
           title: 'Uploader',
           filePath: pathString,
+          backPath,
         });
       }
 
