@@ -10,7 +10,9 @@
     <h1><%= title %></h1>
     <h2>Index of /uploader<%= filePath %></h2>
     <ul>
-      <% locals.folders.map((folder) =>{ %>
+      <% if (filePath) { %>
+      <li><a href="/uploader<%= backPath %>">./</a></li>
+      <% } %> <% locals.folders.map((folder) =>{ %>
       <li>
         <a href="/uploader<%= filePath %>/<%= folder.name %>"
           ><%= folder.name %></a
