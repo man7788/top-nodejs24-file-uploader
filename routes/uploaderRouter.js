@@ -12,5 +12,6 @@ uploaderRouter.post('/', uploaderController.postUploader);
 uploaderRouter.post('/folder', uploaderController.postFolder);
 uploaderRouter.get('/*folders', uploaderController.getFolder);
 uploaderRouter.delete('/*folders', uploaderController.deleteFolder);
+uploaderRouter.patch('/*folders', uploaderController.patchFolder);
 
 module.exports = uploaderRouter;
