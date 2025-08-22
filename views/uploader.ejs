@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/styles.css" />
-    <title>Main</title>
+    <title><%= title %></title>
   </head>
   <body>
     <h1><%= title %></h1>
@@ -17,6 +17,13 @@
         <a href="/uploader<%= filePath %>/<%= folder.name %>"
           ><%= folder.name %></a
         >
+        <form
+          action="/uploader<%= filePath %>/<%= folder.name %>?_method=DELETE"
+          method="POST"
+        >
+          <input type="hidden" name="delete" value="<%= folder.id %>" /><br />
+          <button type="submit">Delete</button>
+        </form>
       </li>
       <% }) %>
     </ul>
