@@ -11,7 +11,7 @@
     <h2>Index of /uploader<%= filePath %></h2>
     <ul>
       <% if (filePath) { %>
-      <li><a href="/uploader<%= backPath %>">./</a></li>
+      <li><a href="/uploader<%= backPath %>">Parent Directory</a></li>
       <% } %> <% locals.folders.map((folder) =>{ %>
       <li>
         <a href="/uploader<%= filePath %>/<%= folder.name %>"
@@ -20,10 +20,24 @@
       </li>
       <% }) %>
     </ul>
+    <form action="/uploader/folder" method="POST">
+      <label for="newFolder">New Folder:</label><br />
+      <input type="text" id="newFolder" name="newFolder" /><br />
+      <button type="submit">Create</button>
+    </form>
+    <% if (locals.errors) { %>
+    <ul>
+      <% errors.forEach((error)=>{ %>
+      <li><%= error.msg %></li>
+      <% }) %>
+    </ul>
+    <% } %>
+    <hr />
     <form action="/uploader" method="POST" enctype="multipart/form-data">
       <input type="file" name="upload" /><br />
       <button type="submit">Upload</button>
     </form>
+    <hr />
     <a href="/log-out">Log Out</a>
   </body>
 </html>
