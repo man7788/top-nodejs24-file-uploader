@@ -170,7 +170,7 @@ exports.postFolder = [
       }
 
       await db.createFolder(
-        req.body.newFolder,
+        req.body.name,
         req.session.passport.user,
         // Session property from get uploader or get folder
         req.session.superFolder
