@@ -5,7 +5,7 @@ const multer = require('multer');
 const nameErr = 'must be between 1 and 255 characters.';
 
 const validateFolder = [
-  body('newFolder')
+  body('name')
     .trim()
     .isLength({ min: 1, max: 255 })
     .withMessage(`Folder name ${nameErr}`)
@@ -163,6 +163,7 @@ exports.postFolder = [
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      // Content flash for get uploader or get folder
       req.flash('errors', errors.array());
       return res.status(400).redirect(`/uploader${pathString}`);
     }
@@ -203,3 +204,40 @@ exports.deleteFolder = async (req, res) => {
 
   res.redirect(`/uploader${pathString}`);
 };
+
+exports.patchFolder = [
+  validateFolder,
+  async (req, res) => {
+    // Session property from get uploader or get folder
+    const path = req.session.path;
+    let pathString = '';
+
+    if (req.session.path) {
+      pathString = '/';
+      path.forEach((name, index) => {
+        if (index === path.length - 1) {
+          pathString = pathString + name;
+          return pathString;
+        }
+
+        pathString = pathString + name + '/';
+      });
+    }
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      // Content flash for get uploader or get folder
+      req.flash('errors', errors.array());
+      return res.status(400).redirect(`/uploader${pathString}`);
+    }
+
+    await db.updateFolder(
+      req.body.name,
+      req.session.passport.user,
+      // Session property from get uploader or get folder
+      req.body.id
+    );
+
+    res.redirect(`/uploader${pathString}`);
+  },
+];
