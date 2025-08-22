@@ -169,11 +169,37 @@ exports.postFolder = [
 
     await db.createFolder(
       req.body.newFolder,
-      // Session property from get uploader or get folder
       req.session.passport.user,
+      // Session property from get uploader or get folder
       req.session.superFolder
     );
 
     res.redirect(`/uploader${pathString}`);
   },
 ];
+
+exports.deleteFolder = async (req, res) => {
+  // Session property from get uploader or get folder
+  const path = req.session.path;
+  let pathString = '';
+
+  if (req.session.path) {
+    pathString = '/';
+    path.forEach((name, index) => {
+      if (index === path.length - 1) {
+        pathString = pathString + name;
+        return pathString;
+      }
+
+      pathString = pathString + name + '/';
+    });
+  }
+
+  await db.deleteFolder(
+    req.session.passport.user,
+    // Session property from get uploader or get folder
+    req.body.delete
+  );
+
+  res.redirect(`/uploader${pathString}`);
+};
