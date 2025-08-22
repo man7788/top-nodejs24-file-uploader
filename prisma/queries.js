@@ -77,3 +77,13 @@ exports.readFolder = async (userId, folderId) => {
   }
   return folder;
 };
+
+exports.deleteFolder = async (userId, folderId) => {
+  const folder = await prisma.folder.delete({
+    where: {
+      id: folderId,
+      userId,
+    },
+  });
+  return folder;
+};
