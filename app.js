@@ -7,6 +7,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 const { PrismaClient } = require('@prisma/client');
+const methodOverride = require('method-override');
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.set('view engine', 'ejs');
 app.use(express.static(assetsPath));
 app.use(express.urlencoded({ extended: true }));
 app.use(flash());
+app.use(methodOverride('X-HTTP-Method-Override'));
+app.use(methodOverride('_method'));
 
 const indexRouter = require('./routes/indexRouter');
 const uploaderRouter = require('./routes/uploaderRouter');
