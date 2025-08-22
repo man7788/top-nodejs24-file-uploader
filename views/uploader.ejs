@@ -18,6 +18,14 @@
           ><%= folder.name %></a
         >
         <form
+          action="/uploader<%= filePath %>/<%= folder.name %>?_method=PATCH"
+          method="POST"
+        >
+          <input type="hidden" name="id" value="<%= folder.id %>" /><br />
+          <input type="text" name="name" /><br />
+          <button type="submit">Update Name</button>
+        </form>
+        <form
           action="/uploader<%= filePath %>/<%= folder.name %>?_method=DELETE"
           method="POST"
         >
@@ -29,7 +37,7 @@
     </ul>
     <form action="/uploader/folder" method="POST">
       <label for="newFolder">New Folder:</label><br />
-      <input type="text" id="newFolder" name="newFolder" /><br />
+      <input type="text" id="newFolder" name="name" /><br />
       <button type="submit">Create</button>
     </form>
     <% if (locals.errors) { %>
