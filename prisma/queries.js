@@ -87,3 +87,16 @@ exports.deleteFolder = async (userId, folderId) => {
   });
   return folder;
 };
+
+exports.updateFolder = async (name, userId, folderId) => {
+  const folder = await prisma.folder.update({
+    where: {
+      id: folderId,
+      userId,
+    },
+    data: {
+      name,
+    },
+  });
+  return folder;
+};
