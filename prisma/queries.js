@@ -114,3 +114,13 @@ exports.createFile = async (name, path, size, userId, folderId) => {
   });
   return file;
 };
+
+exports.readAllFiles = async (userId, folderId) => {
+  const files = await prisma.file.findMany({
+    where: {
+      userId,
+      folderId,
+    },
+  });
+  return files;
+};
