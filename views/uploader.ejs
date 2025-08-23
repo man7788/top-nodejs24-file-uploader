@@ -35,6 +35,16 @@
       </li>
       <% }) %>
     </ul>
+    <hr />
+    <h2>Files:</h2>
+    <% locals.files.map((file) =>{ %>
+    <p><%= file.name %></p>
+    <ul>
+      <li><%= file.size %> bytes</li>
+      <li><%= file.upload_date %></li>
+    </ul>
+    <% }) %>
+    <hr />
     <form action="/uploader/folder" method="POST">
       <label for="newFolder">New Folder:</label><br />
       <input type="text" id="newFolder" name="name" /><br />
