@@ -30,13 +30,13 @@ exports.getUploader = async (req, res) => {
     // Content flash from create folder
     const errors = req.flash('errors');
 
-    const root = await db.readFolder(res.locals.currentUser.id);
-    const files = await db.readAllFiles(req.user.id, req.session.superFolder);
+    const root = await db.readFolder(req.user.id);
+    const files = await db.readAllFiles(req.user.id, root.id);
 
     res.locals.folders = root.subFolders;
     // Session property for create folder redirect
     req.session.path = null;
-    req.session.superFolder = root.id;
+    req.session.folder = root.id;
 
     res.render('uploader', {
       title: 'Uploader',
@@ -57,7 +57,7 @@ exports.postUploader = [
       req.file.path,
       req.file.size,
       req.user.id,
-      req.session.superFolder
+      req.session.folder
     );
 
     const path = req.session.path;
@@ -82,7 +82,7 @@ exports.postUploader = [
 // Folder Controllers
 exports.getFolder = async (req, res) => {
   if (req.isAuthenticated()) {
-    const root = await db.readFolder(res.locals.currentUser.id);
+    const root = await db.readFolder(req.user.id);
     const path = req.params.folders;
 
     let pathString = '/';
@@ -134,7 +134,7 @@ exports.getFolder = async (req, res) => {
         res.locals.folders = folder.subFolders;
         // Session property for create folder redirect
         req.session.path = path;
-        req.session.superFolder = folder.id;
+        req.session.folder = folder.id;
 
         return res.render('uploader', {
           title: 'Uploader',
@@ -155,10 +155,7 @@ exports.getFolder = async (req, res) => {
         return res.status(404).send('Not Found');
       }
 
-      const nextFolder = await db.readFolder(
-        res.locals.currentUser.id,
-        targetFolder.id
-      );
+      const nextFolder = await db.readFolder(req.user.id, targetFolder.id);
 
       index += 1;
       return traversePath(nextFolder, index);
@@ -201,7 +198,7 @@ exports.postFolder = [
         req.body.name,
         req.session.passport.user,
         // Session property from get uploader or get folder
-        req.session.superFolder
+        req.session.folder
       );
 
       res.redirect(`/uploader${pathString}`);
@@ -229,6 +226,7 @@ exports.deleteFolder = async (req, res) => {
       });
     }
 
+    console.log(req.body.delete);
     await db.deleteFolder(
       req.session.passport.user,
       // Session property from get uploader or get folder
