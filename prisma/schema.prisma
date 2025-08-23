@@ -41,6 +41,6 @@ model File {
   upload_date DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
   userId      Int
-  folder      Folder   @relation(fields: [folderId], references: [id])
+  folder      Folder   @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId    String
 }
