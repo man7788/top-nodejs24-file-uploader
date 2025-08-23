@@ -100,3 +100,17 @@ exports.updateFolder = async (name, userId, folderId) => {
   });
   return folder;
 };
+
+// File Queries
+exports.createFile = async (name, path, size, userId, folderId) => {
+  const file = await prisma.file.create({
+    data: {
+      name,
+      path,
+      size,
+      userId,
+      folderId,
+    },
+  });
+  return file;
+};
