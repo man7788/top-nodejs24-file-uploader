@@ -27,9 +27,11 @@ const upload = multer({ storage: storage });
 // Uploader Controllers
 exports.getUploader = async (req, res) => {
   if (req.isAuthenticated()) {
-    const root = await db.readFolder(res.locals.currentUser.id);
     // Content flash from create folder
     const errors = req.flash('errors');
+
+    const root = await db.readFolder(res.locals.currentUser.id);
+    const files = await db.readAllFiles(req.user.id, req.session.superFolder);
 
     res.locals.folders = root.subFolders;
     // Session property for create folder redirect
@@ -39,6 +41,7 @@ exports.getUploader = async (req, res) => {
     res.render('uploader', {
       title: 'Uploader',
       filePath: null,
+      files,
       errors,
     });
   } else {
@@ -126,6 +129,7 @@ exports.getFolder = async (req, res) => {
       if (index > path.length - 1) {
         // Content flash from create folder
         const errors = req.flash('errors');
+        const files = await db.readAllFiles(req.user.id, folder.id);
 
         res.locals.folders = folder.subFolders;
         // Session property for create folder redirect
@@ -135,6 +139,7 @@ exports.getFolder = async (req, res) => {
         return res.render('uploader', {
           title: 'Uploader',
           filePath: pathString,
+          files,
           backPath,
           errors,
         });
