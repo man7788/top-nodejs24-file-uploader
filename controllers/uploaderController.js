@@ -1,3 +1,4 @@
+const fs = require('fs');
 const { body, validationResult } = require('express-validator');
 const db = require('../prisma/queries');
 const multer = require('multer');
@@ -225,8 +226,17 @@ exports.deleteFolder = async (req, res) => {
         pathString = pathString + name + '/';
       });
     }
+    const files = await db.readAllFiles(
+      req.session.passport.user,
+      req.body.delete
+    );
 
-    console.log(req.body.delete);
+    files.forEach((file) => {
+      fs.unlink(file.path, (err) => {
+        if (err) throw err;
+      });
+    });
+
     await db.deleteFolder(
       req.session.passport.user,
       // Session property from get uploader or get folder
