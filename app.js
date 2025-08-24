@@ -41,7 +41,7 @@ app.use(
 );
 
 // PASSPORT SETUP //
-require('./passport');
+require('./utils/passport');
 app.use(passport.session());
 app.use((req, res, next) => {
   req.user && (res.locals.currentUser = req.user);
