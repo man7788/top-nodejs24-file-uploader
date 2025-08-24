@@ -2,6 +2,7 @@ const fs = require('fs');
 const { body, validationResult } = require('express-validator');
 const db = require('../prisma/queries');
 const multer = require('multer');
+const { uploadImage } = require('../utils/cloudinary');
 
 const nameErr = 'must be between 1 and 255 characters.';
 
@@ -53,13 +54,25 @@ exports.getUploader = async (req, res) => {
 exports.postUploader = [
   upload.single('upload'),
   async (req, res) => {
-    await db.createFile(
-      req.file.filename,
-      req.file.path,
-      req.file.size,
-      req.user.id,
-      req.session.folder
-    );
+    if (req.file) {
+      const filePath = req.file.path;
+      const url = await uploadImage(filePath);
+
+      await db.createFile(
+        req.file.filename,
+        url,
+        req.file.size,
+        req.user.id,
+        req.session.folder
+      );
+
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          console.error('Error deleting file:', err);
+          return res.status(500).send('Error processing file.');
+        }
+      });
+    }
 
     const path = req.session.path;
     let pathString = '';
