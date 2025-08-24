@@ -124,3 +124,14 @@ exports.readAllFiles = async (userId, folderId) => {
   });
   return files;
 };
+
+exports.readFile = async (name, userId, folderId) => {
+  const files = await prisma.file.findFirst({
+    where: {
+      name,
+      userId,
+      folderId,
+    },
+  });
+  return files;
+};
