@@ -54,7 +54,7 @@ exports.postUploader = [
   upload.single('upload'),
   async (req, res) => {
     await db.createFile(
-      req.file.originalname,
+      req.file.filename,
       req.file.path,
       req.file.size,
       req.user.id,
@@ -79,6 +79,28 @@ exports.postUploader = [
     res.redirect(`/uploader${pathString}`);
   },
 ];
+
+exports.getDownload = async (req, res) => {
+  const file = await db.readFile(
+    req.params.name,
+    req.user.id,
+    req.session.folder
+  );
+  const filePath = file.path;
+
+  // res.send(file);
+  res.download(filePath, (err) => {
+    if (err) {
+      console.error('File download error:', err);
+      // Handle specific error types, e.g., file not found (ENOENT)
+      if (err.code === 'ENOENT') {
+        res.status(404).send('File not found.');
+      } else {
+        res.status(500).send('Error downloading file.');
+      }
+    }
+  });
+};
 
 // Folder Controllers
 exports.getFolder = async (req, res) => {
