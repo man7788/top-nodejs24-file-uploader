@@ -1,8 +1,8 @@
-const fs = require('fs');
 const { body, validationResult } = require('express-validator');
 const db = require('../prisma/queries');
+const fs = require('fs');
 const multer = require('multer');
-const { uploadImage } = require('../utils/cloudinary');
+const { uploadImage, deleteImage } = require('../utils/cloudinary');
 
 const nameErr = 'must be between 1 and 255 characters.';
 
@@ -261,16 +261,24 @@ exports.deleteFolder = async (req, res) => {
         pathString = pathString + name + '/';
       });
     }
+
     const files = await db.readAllFiles(
       req.session.passport.user,
       req.body.delete
     );
 
+    const publicIds = [];
+
     files.forEach((file) => {
-      fs.unlink(file.path, (err) => {
-        if (err) throw err;
-      });
+      const lastDotIndex = file.name.lastIndexOf('.');
+      if (lastDotIndex === -1) {
+        return filename; // No extension found
+      }
+
+      publicIds.push(file.name.substring(0, lastDotIndex));
     });
+
+    await deleteImage(publicIds);
 
     await db.deleteFolder(
       req.session.passport.user,
