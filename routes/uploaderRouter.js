@@ -7,6 +7,7 @@ const uploaderRouter = Router();
 // Uploader Routes
 uploaderRouter.get('/', uploaderController.getUploader);
 uploaderRouter.post('/', uploaderController.postUploader);
+uploaderRouter.get('/download/:name', uploaderController.getDownload);
 
 // Folder Routes
 uploaderRouter.post('/folder', uploaderController.postFolder);
