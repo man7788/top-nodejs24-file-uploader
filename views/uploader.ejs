@@ -42,7 +42,7 @@
     <ul>
       <li><%= file.size %> bytes</li>
       <li><%= file.upload_date %></li>
-      <a href="/uploader/download/<%= file.name %>">Download</a>
+      <a href="<%= file.path %>">Download</a>
     </ul>
     <% }) %>
     <hr />
