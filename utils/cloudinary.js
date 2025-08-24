@@ -28,3 +28,12 @@ exports.uploadImage = async (imagePath) => {
     console.error(error);
   }
 };
+
+exports.deleteImage = async (public_ids) => {
+  try {
+    const deleted = await cloudinary.api.delete_resources(public_ids);
+    return deleted;
+  } catch (error) {
+    console.error(error);
+  }
+};
